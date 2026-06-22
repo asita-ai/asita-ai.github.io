@@ -50,7 +50,15 @@
       display: block; width: 100%; max-width: 360px;
       padding: 20px; background: #FFD700; color: #000;
       font-size: 18px; font-weight: 900; border-radius: 50px;
+      text-decoration: none; text-align: center; cursor: pointer;
+      border: none;
+    }
+    .btn-secondary {
+      display: block; width: 100%; max-width: 360px;
+      padding: 16px; background: transparent; color: #888;
+      font-size: 14px; font-weight: 600; border-radius: 50px;
       text-decoration: none; text-align: center;
+      border: 1px solid #333; margin-top: 12px;
     }
     .expired { color: #ff6b6b; font-size: 18px; font-weight: 700; margin-top: 20px; }
   </style>
@@ -75,8 +83,11 @@
     <div class="reward-text">A mystery reward is waiting...<br>Download the app to accept the challenge!</div>
   </div>
 
-  <a href="https://apps.apple.com/app/id6781253303" class="btn" id="downloadBtn">
-    📲 Download &amp; Accept Challenge
+  <a href="#" class="btn" id="openBtn" onclick="openApp(); return false;">
+    🎯 Accept Challenge
+  </a>
+  <a href="https://apps.apple.com/app/id6781253303" class="btn-secondary" id="downloadBtn">
+    📲 Don't have the app? Download here
   </a>
 
   <div class="expired" id="expiredMsg" style="display:none">⏰ This challenge has expired.</div>
@@ -84,18 +95,22 @@
   <script>
     var p = new URLSearchParams(location.search);
     var t = p.get('t') || '?.??';
+    var r = p.get('r') || '';
     var b = p.get('b') === '1';
     var e = p.get('e');
 
     document.getElementById('targetTime').textContent = t;
     if (b) document.getElementById('blindBadge').style.display = 'block';
 
+    var expired = false;
     if (e) {
       var expiry = new Date(parseInt(e) * 1000);
       var now = new Date();
       var diff = expiry - now;
       if (diff <= 0) {
+        expired = true;
         document.getElementById('expiredMsg').style.display = 'block';
+        document.getElementById('openBtn').style.display = 'none';
         document.getElementById('downloadBtn').style.display = 'none';
         document.getElementById('challengeCard').style.opacity = '0.4';
       } else {
@@ -105,6 +120,14 @@
           '⏰ Expires in ' + (h > 0 ? h + 'h ' : '') + m + 'm';
       }
     }
-  </script>
+
+    function openApp() {
+      if (expired) return;
+      var deepLink = 'challenge777://mission?t=' + encodeURIComponent(t)
+        + '&r=' + encodeURIComponent(r)
+        + (b ? '&b=1' : '') + (e ? '&e=' + e : '');
+      window.location.href = deepLink;
+    }
+</script>
 </body>
 </html>
