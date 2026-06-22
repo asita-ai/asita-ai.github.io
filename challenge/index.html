@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta id="appBanner" name="apple-itunes-app" content="app-id=6781253303">
+  <script>
+    document.getElementById('appBanner').content =
+      'app-id=6781253303, app-argument=' + location.href;
+  </script>
+  <title>Lucky 777 Challenge</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000; color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 40px 24px;
+    }
+    .logo { font-size: 48px; font-weight: 900; letter-spacing: 6px; margin-bottom: 4px; }
+    .subtitle { color: #888; font-size: 14px; margin-bottom: 40px; }
+    .card {
+      background: #111; border-radius: 24px; padding: 32px 28px;
+      width: 100%; max-width: 360px; text-align: center; margin-bottom: 20px;
+    }
+    .label {
+      font-size: 11px; font-weight: 700; color: #FFD700;
+      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .target {
+      font-size: 80px; font-weight: 900; color: #FFD700;
+      font-family: 'Courier New', monospace; line-height: 1;
+    }
+    .target-unit { font-size: 18px; color: #888; margin-top: 4px; }
+    .desc { color: #888; font-size: 14px; margin-top: 16px; line-height: 1.6; }
+    .badge {
+      display: inline-block; background: rgba(255,215,0,0.15);
+      border: 1px solid #FFD700; color: #FFD700;
+      font-size: 12px; font-weight: 700; padding: 5px 14px;
+      border-radius: 20px; margin-top: 14px;
+    }
+    .expiry { color: #ff6b6b; font-size: 13px; margin-top: 10px; }
+    .reward-card {
+      background: #111; border-radius: 24px; padding: 24px;
+      width: 100%; max-width: 360px; text-align: center; margin-bottom: 32px;
+    }
+    .reward-emoji { font-size: 44px; margin-bottom: 8px; }
+    .reward-text { color: #aaa; font-size: 15px; line-height: 1.5; }
+    .btn {
+      display: block; width: 100%; max-width: 360px;
+      padding: 20px; background: #FFD700; color: #000;
+      font-size: 18px; font-weight: 900; border-radius: 50px;
+      text-decoration: none; text-align: center;
+    }
+    .expired { color: #ff6b6b; font-size: 18px; font-weight: 700; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <span style="color:#ff4444">7</span><span style="color:#FFD700">7</span><span style="color:#44dd44">7</span>
+  </div>
+  <div class="subtitle">Lucky Seven Challenge</div>
+
+  <div class="card" id="challengeCard">
+    <div class="label">Stop exactly at</div>
+    <div class="target" id="targetTime">?.??</div>
+    <div class="target-unit">seconds</div>
+    <div class="desc">Can you stop the timer at the exact moment?</div>
+    <div id="blindBadge" style="display:none"><div class="badge">🙈 Blind Mode ON</div></div>
+    <div class="expiry" id="expiryText"></div>
+  </div>
+
+  <div class="reward-card">
+    <div class="reward-emoji">🎁</div>
+    <div class="reward-text">A mystery reward is waiting...<br>Download the app to accept the challenge!</div>
+  </div>
+
+  <a href="https://apps.apple.com/app/id6781253303" class="btn" id="downloadBtn">
+    📲 Download &amp; Accept Challenge
+  </a>
+
+  <div class="expired" id="expiredMsg" style="display:none">⏰ This challenge has expired.</div>
+
+  <script>
+    var p = new URLSearchParams(location.search);
+    var t = p.get('t') || '?.??';
+    var b = p.get('b') === '1';
+    var e = p.get('e');
+
+    document.getElementById('targetTime').textContent = t;
+    if (b) document.getElementById('blindBadge').style.display = 'block';
+
+    if (e) {
+      var expiry = new Date(parseInt(e) * 1000);
+      var now = new Date();
+      var diff = expiry - now;
+      if (diff <= 0) {
+        document.getElementById('expiredMsg').style.display = 'block';
+        document.getElementById('downloadBtn').style.display = 'none';
+        document.getElementById('challengeCard').style.opacity = '0.4';
+      } else {
+        var h = Math.floor(diff / 3600000);
+        var m = Math.floor((diff % 3600000) / 60000);
+        document.getElementById('expiryText').textContent =
+          '⏰ Expires in ' + (h > 0 ? h + 'h ' : '') + m + 'm';
+      }
+    }
+  </script>
+</body>
+</html>
